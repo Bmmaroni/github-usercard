@@ -5,12 +5,11 @@ import axios from 'axios';
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
-let myArray = [];
-axios.get('https://api.github.com/users/Bmmaroni')
+axios
+  .get('https://api.github.com/users/Bmmaroni')
   .then(response => {
-    console.log('Response:', response);
-
-    cards.append(cardMaker(response));
+    console.log('Response:', response.data);
+    cards.appendChild(cardMaker(response.data));
   })
   .catch(error => {
     console.log('Error:', error)
@@ -40,7 +39,19 @@ axios.get('https://api.github.com/users/Bmmaroni')
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['tetondan','dustinmyers','justsml','luishrd','bigknell'];
+
+followersArray.forEach(person => {
+  axios
+    .get(`https://api.github.com/users/${person}`)
+    .then(response => {
+      console.log('Response:', response.data);
+      cards.appendChild(cardMaker(response.data));
+    })
+    .catch(error => {
+      console.log('Error:', error)
+    });
+})
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -78,7 +89,6 @@ function cardMaker(object){
 
   card.appendChild(cardImage);
   card.appendChild(cardInfo);
-  card.appendChild(cardImage);
   cardInfo.appendChild(name);
   cardInfo.appendChild(username);
   cardInfo.appendChild(location);
@@ -93,15 +103,15 @@ function cardMaker(object){
   name.classList.add('name');
   username.classList.add('username');
 
-  cardImage.src = object.data.avatar_url;
-  name.textContent = object.data.name;
-  username.textContent = object.data.login;
-  location.textContent = 'Location: ', object.data.location;
-  profile.textContent = 'Profile: ';
-  profileAddress.src = object.data.html_url;
-  followers.textContent = object.data.followers;
-  following.textContent = object.data.following;
-  bio.textContent = 'Bio: ', object.data.bio;
+  cardImage.src = object.avatar_url;
+  name.textContent = object.name;
+  username.textContent = object.login;
+  location.textContent = `Location: ${object.location}`;
+  profile.textContent = `Profile: `;
+  profileAddress.href = `HREF: ${object.html_url}`;
+  followers.textContent = `Followers: ${object.followers}`;
+  following.textContent = `Following: ${object.following}`;
+  bio.textContent = `Bio: ${object.bio}`;
 
   return card;
 }
