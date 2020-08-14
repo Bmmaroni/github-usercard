@@ -5,6 +5,16 @@ import axios from 'axios';
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+let myArray = [];
+axios.get('https://api.github.com/users/Bmmaroni')
+  .then(response => {
+    console.log('Response:', response);
+
+    cards.append(cardMaker(response));
+  })
+  .catch(error => {
+    console.log('Error:', error)
+  });
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -51,6 +61,53 @@ const followersArray = [];
       </div>
     </div>
 */
+
+function cardMaker(object){
+  
+  const card = document.createElement('div');
+  const cardImage = document.createElement('img');
+  const cardInfo = document.createElement('div');
+  const name = document.createElement('h3');
+  const username = document.createElement('p');
+  const location = document.createElement('p');
+  const profile = document.createElement('p');
+  const profileAddress = document.createElement('a');
+  const followers = document.createElement('p');
+  const following = document.createElement('p');
+  const bio = document.createElement('p');
+
+  card.appendChild(cardImage);
+  card.appendChild(cardInfo);
+  card.appendChild(cardImage);
+  cardInfo.appendChild(name);
+  cardInfo.appendChild(username);
+  cardInfo.appendChild(location);
+  cardInfo.appendChild(profile);
+  profile.appendChild(profileAddress);
+  cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
+  cardInfo.appendChild(bio);
+
+  card.classList.add('card');
+  cardInfo.classList.add('card-info');
+  name.classList.add('name');
+  username.classList.add('username');
+
+  cardImage.src = object.data.avatar_url;
+  name.textContent = object.data.name;
+  username.textContent = object.data.login;
+  location.textContent = 'Location: ', object.data.location;
+  profile.textContent = 'Profile: ';
+  profileAddress.src = object.data.html_url;
+  followers.textContent = object.data.followers;
+  following.textContent = object.data.following;
+  bio.textContent = 'Bio: ', object.data.bio;
+
+  return card;
+}
+
+const cards = document.querySelector('.cards');
+
 
 /*
   List of LS Instructors Github username's:
